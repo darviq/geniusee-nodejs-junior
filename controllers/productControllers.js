@@ -76,8 +76,33 @@ const del = async (req, res, next) => {
   }
 }
 
+const upd = async (req, res, next) => {
+  try {
+    const { ASIN, sellerName, fullPrice, title, url, description, keyword } =
+      req.body
+    const asins = Object.keys(saved)
+    if (asins.find(asin => asin === ASIN)) {
+      saved[ASIN] = [
+        { sellerName, fullPrice, title, url, description, keyword },
+      ]
+      return res.status(200).json({
+        code: 200,
+        message: 'Updated',
+      })
+    } else {
+      return res.status(404).json({
+        code: 404,
+        message: 'Not found',
+      })
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   post,
   get,
   del,
+  upd,
 }
