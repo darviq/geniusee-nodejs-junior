@@ -55,7 +55,29 @@ const get = async (req, res, next) => {
   }
 }
 
+const del = async (req, res, next) => {
+  try {
+    const { ASIN } = req.body
+    const asins = Object.keys(saved)
+    if (asins.find(asin => asin === ASIN)) {
+      delete saved[ASIN]
+      return res.status(200).json({
+        code: 200,
+        message: 'Deleted',
+      })
+    } else {
+      return res.status(404).json({
+        code: 404,
+        message: 'Not found',
+      })
+    }
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   post,
   get,
+  del,
 }
